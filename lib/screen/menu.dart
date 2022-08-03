@@ -7,6 +7,7 @@ class menuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var hauteur = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber,
@@ -17,21 +18,68 @@ class menuScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right:15.0),
+            padding: const EdgeInsets.only(right: 15.0),
             child: Icon(Icons.person_outline),
-          )  
+          )
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
-          color: Colors.green
-        ),
+        decoration: BoxDecoration(color: Colors.green),
         child: ListView(
           children: [
-            Card(
-              color: Colors.transparent,
-              
-              child: Text('test'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: hauteur*0.1,
+                child: Card(
+                  
+                    elevation: 10.0,
+                    shadowColor: Colors.grey.withOpacity(0.5),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.control_point_outlined,
+                          color: Colors.amber,
+                          size: 40,),
+                        ),
+                        Text("Je crée un trajet",
+                            style: GoogleFonts.pacifico(
+                              color: Colors.amber,
+                              fontSize: 20,
+                            )),
+                      ],
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: hauteur*0.1,
+                child: Card(
+                  
+                    elevation: 10.0,
+                    shadowColor: Colors.grey.withOpacity(0.5),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.search,
+                          color: Colors.amber,
+                          size: 40,),
+                        ),
+                        Text("Je cherche un trajet",
+                            style: GoogleFonts.pacifico(
+                              color: Colors.amber,
+                              fontSize: 20,
+                            )),
+                      ],
+                    )),
+              ),
             )
           ],
         ),

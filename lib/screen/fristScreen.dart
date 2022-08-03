@@ -99,7 +99,10 @@ class _fristScreenState extends State<fristScreen> {
                             ),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(30))),
+                                borderRadius: BorderRadius.circular(30)),
+                                focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(30)) ),
                       ),
                       SizedBox(
                         height: 20,
@@ -111,6 +114,7 @@ class _fristScreenState extends State<fristScreen> {
                               MaterialPageRoute(
                                   builder: (context) => menuScreen()));
                         },
+                        // ignore: sort_child_properties_last
                         child: Text(
                           'Conexion',
                           style: GoogleFonts.pacifico(
