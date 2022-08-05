@@ -2,15 +2,16 @@ import 'package:animated_login/animated_login.dart';
 import 'package:co_voit/screen/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
-class fristScreen extends StatefulWidget {
-  fristScreen({Key? key}) : super(key: key);
+class loginScreen extends StatefulWidget {
+  loginScreen({Key? key}) : super(key: key);
   @override
   @override
-  State<fristScreen> createState() => _fristScreenState();
+  State<loginScreen> createState() => _loginScreenState();
 }
 
-class _fristScreenState extends State<fristScreen> {
+class _loginScreenState extends State<loginScreen> {
   double test = 200;
   double _opacity = 0;
   double _offset = -10;
@@ -29,14 +30,7 @@ class _fristScreenState extends State<fristScreen> {
     return Scaffold(
         body: Container(
             decoration: const BoxDecoration(
-                //     gradient: LinearGradient(
-                //   begin: Alignment.topCenter,
-                //   end: Alignment.bottomCenter,
-                //   colors: [
-                //     Color(0xff2CBF9C),
-                //     Color(0xff008D53),
-                //   ],
-                // )
+            
                 color: Colors.green),
             child: Center(
                 child: SingleChildScrollView(
@@ -44,12 +38,13 @@ class _fristScreenState extends State<fristScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
-                    child: AnimatedSlide(
-                      offset: Offset(_offset, 0),
-                      duration: Duration(seconds: 5),
-                      curve: Curves.bounceOut,
-                      child: Image.asset('asset/voiture2.png', scale: 0.5),
-                    ),
+                    child: Lottie.network("https://assets10.lottiefiles.com/packages/lf20_yqzlxe4m.json")
+                    // child: AnimatedSlide(
+                    //   offset: Offset(_offset, 0),
+                    //   duration: Duration(seconds: 5),
+                    //   curve: Curves.bounceOut,
+                    //   child: Image.asset('asset/voiture2.png', scale: 0.5),
+                    // ),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 30),

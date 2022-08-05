@@ -3,9 +3,13 @@ import 'package:co_voit/screen/fristScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -24,20 +28,20 @@ class splashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var hauteur = MediaQuery.of(context).size.height;
     return AnimatedSplashScreen(
-        duration: 4500,
-        centered: true,
-        splash: Text(
-                          'Co-voit',
-                          style: GoogleFonts.pacifico(
-                            color:Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 50,
-                          decorationStyle:TextDecorationStyle.solid
-                          ),
-                        ),
-        splashTransition: SplashTransition.scaleTransition,
-        backgroundColor: Colors.green,
-        nextScreen: fristScreen(),
-        pageTransitionType: PageTransitionType.leftToRightWithFade,);
+      duration: 4500,
+      centered: true,
+      splash: Text(
+        'Co-voit',
+        style: GoogleFonts.pacifico(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 50,
+            decorationStyle: TextDecorationStyle.solid),
+      ),
+      splashTransition: SplashTransition.scaleTransition,
+      backgroundColor: Colors.green,
+      nextScreen: loginScreen(),
+      pageTransitionType: PageTransitionType.leftToRightWithFade,
+    );
   }
 }

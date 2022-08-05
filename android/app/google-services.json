@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "84591635097",
+    "project_id": "co-voit-85111",
+    "storage_bucket": "co-voit-85111.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84591635097:android:c17a5c0fe8c82a2020e608",
+        "android_client_info": {
+          "package_name": "com.example.co_voit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "84591635097-07eq7v89s7p33sabrnfegsh1533rmb7q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD52aHH5jg6iMnyYLX1QhffmXmuIBj2WsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "84591635097-07eq7v89s7p33sabrnfegsh1533rmb7q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
