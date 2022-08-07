@@ -1,3 +1,4 @@
+import 'package:co_voit/screen/consultationTrajet.dart';
 import 'package:co_voit/screen/creation_Trajet.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -71,40 +72,48 @@ class menuScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: hauteur * 0.4,
-                child: Card(
-                    elevation: 10.0,
-                    shadowColor: Colors.grey.withOpacity(0.5),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                Icons.search,
-                                color: Colors.amber,
-                                size: 40,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => consultationTrajet()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: hauteur * 0.4,
+                  child: Card(
+                      elevation: 10.0,
+                      shadowColor: Colors.grey.withOpacity(0.5),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.search,
+                                  color: Colors.amber,
+                                  size: 40,
+                                ),
                               ),
-                            ),
-                            Text("Je cherche un trajet",
-                                style: GoogleFonts.pacifico(
-                                    color: Colors.amber,
-                                    fontSize: 20,
-                                    decoration: TextDecoration.underline)),
-                          ],
-                        ),
-                        Lottie.network(
-                            "https://assets2.lottiefiles.com/private_files/lf30_gd2unfh8.json",
-                            height: hauteur * 0.3)
-                      ],
-                    )),
+                              Text("Je cherche un trajet",
+                                  style: GoogleFonts.pacifico(
+                                      color: Colors.amber,
+                                      fontSize: 20,
+                                      decoration: TextDecoration.underline)),
+                            ],
+                          ),
+                          Lottie.network(
+                              "https://assets2.lottiefiles.com/private_files/lf30_gd2unfh8.json",
+                              height: hauteur * 0.3)
+                        ],
+                      )),
+                ),
               ),
             )
           ],

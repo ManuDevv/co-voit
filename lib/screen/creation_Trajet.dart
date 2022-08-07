@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:co_voit/screen/menu.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -46,7 +47,7 @@ class _creationTrajetState extends State<creationTrajet> {
           height: hauteur * 0.5,
           child: Column(
             children: [
-               Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
                 child: TextField(
                   controller: _depart,
@@ -59,7 +60,7 @@ class _creationTrajetState extends State<creationTrajet> {
                       hintText: 'Bergues'),
                 ),
               ),
-               Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
                 child: TextField(
                   controller: _arrivee,
@@ -136,7 +137,7 @@ class _creationTrajetState extends State<creationTrajet> {
                       shape: MaterialStateProperty.all(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30)))),
                   onPressed: () {
-                    ajoutTrajet();
+                    showSimpleDialog(context);
                   },
                   child: Text(
                     'Publier un trajet',
@@ -154,12 +155,86 @@ class _creationTrajetState extends State<creationTrajet> {
 
   void ajoutTrajet() {
     try {
-      laRefdelaBDD
-          .collection('trajet')
-          .add({"départ": _depart.toString(), "arrivée": _arrivee.toString()}).then(
-              (value) => value.id);
+      laRefdelaBDD.collection('trajet').add({
+        "départ": _depart.text,
+        "arrivée": _arrivee.text,
+        "Nbr de personnes": passager
+      }).then((value) => value.id);
     } catch (erreur) {
       print(erreur.toString());
     }
+  }
+
+  void showSimpleDialog(BuildContext context) => showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.green,
+          title: Text(
+            'Voulez vous publier ce trajet ?',
+            style: GoogleFonts.pacifico(color: Colors.white),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                      side: BorderSide(color: Colors.black)),
+                  onPressed: () {
+                    ajoutTrajet();
+                    bottonDialog();
+                  },
+                  child: Text('OUI'),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                      shadowColor: Colors.black,
+                      side: BorderSide(color: Colors.black)),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('NON'),
+                )
+              ],
+            )
+          ],
+        );
+      });
+  bottonDialog() {
+    return showModalBottomSheet(
+      backgroundColor: Colors.green,
+      shape: RoundedRectangleBorder(
+        
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20)
+        )
+      ),
+        context: context,
+        builder: (context) => Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Trajet Publié ! ',
+                  style: GoogleFonts.pacifico(
+                    color:Colors.white,
+                    fontSize:25
+                  ),),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.amber
+                    ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => menuScreen()));
+                      },
+                      child: Text('Menu principal'))
+                ],
+              ),
+            ));
   }
 }
