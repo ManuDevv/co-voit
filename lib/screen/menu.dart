@@ -1,13 +1,33 @@
 import 'package:co_voit/screen/consultationTrajet.dart';
 import 'package:co_voit/screen/creation_Trajet.dart';
+import 'package:co_voit/screen/fristScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'style.dart';
+import 'fristScreen.dart';
 
-class menuScreen extends StatelessWidget {
+class main_menu extends StatelessWidget {
+  const main_menu({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: menuScreen(),
+    );
+  }
+}
+
+class menuScreen extends StatefulWidget {
   const menuScreen({Key? key}) : super(key: key);
 
+  @override
+  State<menuScreen> createState() => _menuScreenState();
+}
+
+class _menuScreenState extends State<menuScreen> {
   @override
   Widget build(BuildContext context) {
     var hauteur = MediaQuery.of(context).size.height;
@@ -23,7 +43,14 @@ class menuScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 15.0),
             child: Icon(Icons.person_outline),
-          )
+          ),
+          Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: IconButton(
+                  onPressed: () {
+                    showDeconnexion();
+                  },
+                  icon: Icon(Icons.logout_rounded)))
         ],
       ),
       body: Container(
@@ -120,5 +147,49 @@ class menuScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  showDeconnexion() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.green,
+            title: Text(
+              'Voulez-vous vous déconnecter ?',
+              style: stylePrincipal25,
+            ),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
+                        side: BorderSide(color: Colors.black)),
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => login_screen()));
+                    },
+                    child: Text('OUI'),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                        shadowColor: Colors.black,
+                        side: BorderSide(color: Colors.black)),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('NON'),
+                  )
+                ],
+              )
+            ],
+          );
+        });
   }
 }

@@ -1,45 +1,18 @@
-import 'package:animated_login/animated_login.dart';
-import 'package:co_voit/screen/creation_compte.dart';
-import 'package:co_voit/screen/menu.dart';
-import 'package:co_voit/screen/style.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class login_screen extends StatelessWidget {
-  const login_screen({Key? key}) : super(key: key);
+class creation_compte extends StatefulWidget {
+  creation_compte({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: loginScreen(),
-    );
-  }
+  State<creation_compte> createState() => _creation_compteState();
 }
 
-class loginScreen extends StatefulWidget {
-  loginScreen({Key? key}) : super(key: key);
-  @override
-  @override
-  State<loginScreen> createState() => _loginScreenState();
-}
-
-class _loginScreenState extends State<loginScreen> {
-  double test = 200;
-  double _opacity = 0;
-  double _offset = -10;
+class _creation_compteState extends State<creation_compte> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  // @override
-  // void initState() {
-  //   testOpacity(dynamic);
-  //   testSlide();
-  //   super.initState();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +28,9 @@ class _loginScreenState extends State<loginScreen> {
                   Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: Lottie.network(
-                          "https://assets10.lottiefiles.com/packages/lf20_yqzlxe4m.json")),
+                          "https://assets6.lottiefiles.com/packages/lf20_dyq0qz89/data.json")
+                    
+                      ),
                   Container(
                     margin: EdgeInsets.only(top: 30),
                     padding: EdgeInsets.all(10),
@@ -79,7 +54,7 @@ class _loginScreenState extends State<loginScreen> {
                       TextField(
                         controller: _emailController,
                         decoration: InputDecoration(
-                            label: Text('Email'),
+                            label: Text('Votre Email'),
                             labelStyle:
                                 GoogleFonts.pacifico(color: Colors.white),
                             // ignore: prefer_const_constructors
@@ -100,7 +75,7 @@ class _loginScreenState extends State<loginScreen> {
                             label: Text('Mot de passe'),
                             labelStyle:
                                 GoogleFonts.pacifico(color: Colors.white),
-                            prefixIcon: const Icon(
+                            prefixIcon: Icon(
                               Icons.lock_open,
                               color: Colors.white,
                             ),
@@ -111,16 +86,16 @@ class _loginScreenState extends State<loginScreen> {
                                 borderSide: BorderSide(color: Colors.white),
                                 borderRadius: BorderRadius.circular(30))),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 20,
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          signIn();
+                          addUser();
                         },
                         // ignore: sort_child_properties_last
                         child: Text(
-                          'Conexion',
+                          'Créer un compte ',
                           style: GoogleFonts.pacifico(
                               color: Colors.white,
                               fontSize: 30,
@@ -132,17 +107,6 @@ class _loginScreenState extends State<loginScreen> {
                               color: Colors.white.withOpacity(0.5), width: 3),
                         ),
                       ),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => creation_compte()));
-                          },
-                          child: Text(
-                            'Créer un compte',
-                            style: stylePrincipalSurligne,
-                          ))
                     ]),
                   ),
                 ],
@@ -150,27 +114,14 @@ class _loginScreenState extends State<loginScreen> {
             ))));
   }
 
-  testOpacity(dynamic) {
-    return Future.delayed(Duration(seconds: 1), () {
-      setState(() {
-        _opacity = 1;
-      });
-    });
-  }
-
-  testSlide() {
-    return Future.delayed(Duration(seconds: 1), () {
-      setState(() {
-        _offset = 0;
-      });
-    });
-  }
-
-  void signIn() {
-    print(_emailController);
+  void addUser() async {
+    print(_emailController.text);
+    print(_passwordController.text);
     try {
-      FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text, password: _passwordController.text);
+      UserCredential newUser = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim());
     } catch (erreur) {
       print(erreur.toString());
     }
