@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:co_voit/screen/menu.dart';
 import 'package:co_voit/screen/style.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,6 +22,10 @@ class _creationTrajetState extends State<creationTrajet> {
   DateTime? dateselectionnee = null;
   final dateFormat = DateFormat('dd-MM-yyyy');
   TimeOfDay? _heureselectionnee = null;
+  String _userdisplayName =
+    FirebaseAuth.instance.currentUser!.displayName.toString();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -246,6 +251,7 @@ class _creationTrajetState extends State<creationTrajet> {
   void ajoutTrajet() {
     try {
       laRefdelaBDD.collection('trajet').add({
+        'nom':_userdisplayName,
         "départ": _depart.text,
         "arrivée": _arrivee.text,
         "Nbr de personnes": passager,

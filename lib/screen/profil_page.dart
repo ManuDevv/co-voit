@@ -1,16 +1,22 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:co_voit/screen/style.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:image_picker/image_picker.dart';
 
-class profilPage extends StatefulWidget {
+final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+String _userdisplayName =
+    FirebaseAuth.instance.currentUser!.displayName.toString();
 
-  profilPage({Key? key }) : super(key: key);
+class profilPage extends StatefulWidget {
+  profilPage({Key? key}) : super(key: key);
 
   @override
   State<profilPage> createState() => _profilPageState();
@@ -20,7 +26,7 @@ class _profilPageState extends State<profilPage> {
   File? _image;
   FirebaseStorage storage = FirebaseStorage.instance;
   String? photoUtilisateur;
-  String uid = 'gdYg68kjgyyM5fZhRKlY';
+  
 
   final picker = ImagePicker();
   @override
@@ -31,6 +37,7 @@ class _profilPageState extends State<profilPage> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
@@ -116,23 +123,34 @@ class _profilPageState extends State<profilPage> {
                     style: ElevatedButton.styleFrom(primary: Colors.amber),
                   ),
                 ),
-                FutureBuilder(
-                    future: FirebaseFirestore.instance
-                        .collection('nameUser')
-                        .doc(uid)
-                        .get(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                // FutureBuilder(
+                //     future: FirebaseFirestore.instance
+                //         .collection('nameUser')
+                //         .doc(uid)
+                //         .get(),
+                //     builder: (context, AsyncSnapshot snapshot) {
+                //       if (snapshot.connectionState == ConnectionState.waiting) {
+                //         return CircularProgressIndicator();
+                //       }
+                //       print(snapshot.data!.data());
+                //       return Column(
+                //         children: [
+                //           Text('Nom : ${snapshot.data!.data()!['nom']}'),
+
+                //         ],
+                //       );
+                //     })
+                StreamBuilder(
+                    stream:
+                     _firebaseAuth.authStateChanges(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.active) {
+                        print(snapshot.data.toString());
+                        var currenttest = FirebaseAuth.instance.currentUser!.displayName.toString();
+                        return Text(currenttest.toString());
+                      } else {
+                        return Text('');
                       }
-                      print(snapshot.data!.data());
-                      return Column(
-                        children: [
-                          Text('Nom : ${snapshot.data!.data()!['nom']}'),
-                          Text('')
-                       
-                        ],
-                      );
                     })
               ],
             ),
@@ -191,5 +209,7 @@ class _profilPageState extends State<profilPage> {
     });
   }
 
- 
+  Future getCurrentUser() async {
+    return await _firebaseAuth.currentUser!.displayName.toString();
+  }
 }

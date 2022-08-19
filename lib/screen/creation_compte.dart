@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
+
+
 class creation_compte extends StatefulWidget {
   creation_compte({Key? key}) : super(key: key);
 
@@ -131,7 +133,7 @@ class _creation_compteState extends State<creation_compte> {
                       ElevatedButton(
                         onPressed: () {
                           addUser();
-                          addname();
+                   
                         },
                         // ignore: sort_child_properties_last
                         child: Text(
@@ -169,17 +171,5 @@ class _creation_compteState extends State<creation_compte> {
     }
   }
 
-  void addname() async {
-    try {
-      FirebaseFirestore.instance.collection(_nomController.text).add({
-        'nom': _nomController.text,
-        'prenom': _prenomController.text
-      }).then((value) => print(value));
-    } catch (erreur) {
-      print(erreur.toString());
-    }
-    setState(() {
-      _nom = _nomController.text;
-    });
-  }
+
 }

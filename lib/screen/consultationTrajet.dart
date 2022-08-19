@@ -109,7 +109,7 @@ class _consultationTrajetState extends State<consultationTrajet> {
                                           CircleAvatar(
                                               backgroundImage: NetworkImage(
                                                   '$photoUtilisateur')),
-                                                  Text('test')
+                                                  Text('test: ${snapshot.data!.docs[index].data()['nom']}')
                                         ],
                                       ),
                                     ],
