@@ -92,6 +92,8 @@ class _creationTrajetState extends State<creationTrajet> {
                         if (newDate == null) return;
                         setState(() {
                           dateselectionnee = newDate;
+                          final dateFormat =
+                              DateFormat('dd-MM-yyyy').format(aujourdhui);
                         });
                         print(dateselectionnee);
                       },
@@ -207,7 +209,7 @@ class _creationTrajetState extends State<creationTrajet> {
                               passager -= 1;
                             });
                           },
-                          icon:const  Icon(
+                          icon: const Icon(
                             Icons.remove_circle_rounded,
                             color: Colors.amber,
                             size: 40,
@@ -247,7 +249,7 @@ class _creationTrajetState extends State<creationTrajet> {
         "départ": _depart.text,
         "arrivée": _arrivee.text,
         "Nbr de personnes": passager,
-        "date": dateselectionnee,
+        "date": dateFormat.toString(),
         "heure": _heureselectionnee.toString()
       }).then((value) => value.id);
     } catch (erreur) {

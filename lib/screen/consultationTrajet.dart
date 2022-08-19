@@ -1,11 +1,13 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'creation_compte.dart';
 
 class consultationTrajet extends StatefulWidget {
-  const consultationTrajet({Key? key}) : super(key: key);
+  const consultationTrajet({Key? key,}) : super(key: key);
 
   @override
   State<consultationTrajet> createState() => _consultationTrajetState();
@@ -13,6 +15,8 @@ class consultationTrajet extends StatefulWidget {
 
 class _consultationTrajetState extends State<consultationTrajet> {
   var dateFormat = DateFormat('dd/MM/yyyy');
+  String? photoUtilisateur;
+  FirebaseStorage storage = FirebaseStorage.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +108,8 @@ class _consultationTrajetState extends State<consultationTrajet> {
                                         children: [
                                           CircleAvatar(
                                               backgroundImage: NetworkImage(
-                                                  "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"))
+                                                  '$photoUtilisateur')),
+                                                  Text('test')
                                         ],
                                       ),
                                     ],
@@ -117,4 +122,14 @@ class _consultationTrajetState extends State<consultationTrajet> {
               }),
         ));
   }
+
+  getprofilImage() {
+    Reference storageRef = storage.ref('Users').child('test.png');
+    storageRef.getDownloadURL().then((photo) {
+      setState(() {
+        photoUtilisateur = photo;
+      });
+    });
+  }
+  
 }

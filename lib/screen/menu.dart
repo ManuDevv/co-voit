@@ -1,9 +1,10 @@
 import 'package:co_voit/screen/consultationTrajet.dart';
 import 'package:co_voit/screen/creation_Trajet.dart';
 import 'package:co_voit/screen/fristScreen.dart';
+import 'package:co_voit/screen/profil_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:lottie/lottie.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'style.dart';
@@ -15,6 +16,7 @@ class main_menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: menuScreen(),
     );
   }
@@ -42,7 +44,9 @@ class _menuScreenState extends State<menuScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 15.0),
-            child: Icon(Icons.person_outline),
+            child: IconButton
+            (onPressed: (() => Navigator.push(context, MaterialPageRoute(builder: (context)=>profilPage()))),
+              icon: Icon(Icons.person_outline)),
           ),
           Padding(
               padding: const EdgeInsets.only(right: 15.0),

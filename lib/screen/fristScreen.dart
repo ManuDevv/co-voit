@@ -169,8 +169,13 @@ class _loginScreenState extends State<loginScreen> {
   void signIn() {
     print(_emailController);
     try {
-      FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text, password: _passwordController.text);
+      FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim())
+          .then((value) {
+        print(value);
+      });
     } catch (erreur) {
       print(erreur.toString());
     }

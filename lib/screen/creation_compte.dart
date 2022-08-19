@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:co_voit/screen/profil_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,6 +15,9 @@ class creation_compte extends StatefulWidget {
 class _creation_compteState extends State<creation_compte> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nomController = TextEditingController();
+  final TextEditingController _prenomController = TextEditingController();
+  String? _nom;
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +33,11 @@ class _creation_compteState extends State<creation_compte> {
                   Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: Lottie.network(
-                          "https://assets6.lottiefiles.com/packages/lf20_dyq0qz89/data.json")
-                    
-                      ),
+                          "https://assets6.lottiefiles.com/packages/lf20_dyq0qz89/data.json")),
                   Container(
                     margin: EdgeInsets.only(top: 30),
-                    padding: EdgeInsets.all(10),
-                    height: hauteur / 2,
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    //    height: hauteur / 3,
                     width: largeur * 0.8,
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.white, width: 3),
@@ -52,6 +55,42 @@ class _creation_compteState extends State<creation_compte> {
                         height: 20,
                       ),
                       TextField(
+                        controller: _nomController,
+                        decoration: InputDecoration(
+                            label: Text('Nom'),
+                            labelStyle:
+                                GoogleFonts.pacifico(color: Colors.white),
+                            // ignore: prefer_const_constructors
+                            prefixIcon: Icon(
+                              Icons.person_add_alt,
+                              color: Colors.white,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(30))),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextField(
+                        controller: _prenomController,
+                        decoration: InputDecoration(
+                            label: Text('Prénom'),
+                            labelStyle:
+                                GoogleFonts.pacifico(color: Colors.white),
+                            // ignore: prefer_const_constructors
+                            prefixIcon: Icon(
+                              Icons.person_add_alt_1,
+                              color: Colors.white,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(30))),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextField(
                         controller: _emailController,
                         decoration: InputDecoration(
                             label: Text('Votre Email'),
@@ -59,7 +98,7 @@ class _creation_compteState extends State<creation_compte> {
                                 GoogleFonts.pacifico(color: Colors.white),
                             // ignore: prefer_const_constructors
                             prefixIcon: Icon(
-                              Icons.people,
+                              Icons.email_outlined,
                               color: Colors.white,
                             ),
                             enabledBorder: OutlineInputBorder(
@@ -92,6 +131,7 @@ class _creation_compteState extends State<creation_compte> {
                       ElevatedButton(
                         onPressed: () {
                           addUser();
+                          addname();
                         },
                         // ignore: sort_child_properties_last
                         child: Text(
@@ -122,8 +162,24 @@ class _creation_compteState extends State<creation_compte> {
           .createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
               password: _passwordController.text.trim());
+      newUser.user!.updateDisplayName(_nomController.text);
+      print(newUser);
     } catch (erreur) {
       print(erreur.toString());
     }
+  }
+
+  void addname() async {
+    try {
+      FirebaseFirestore.instance.collection(_nomController.text).add({
+        'nom': _nomController.text,
+        'prenom': _prenomController.text
+      }).then((value) => print(value));
+    } catch (erreur) {
+      print(erreur.toString());
+    }
+    setState(() {
+      _nom = _nomController.text;
+    });
   }
 }
