@@ -26,18 +26,16 @@ class _profilPageState extends State<profilPage> {
   File? _image;
   FirebaseStorage storage = FirebaseStorage.instance;
   String? photoUtilisateur;
-  
 
   final picker = ImagePicker();
   @override
   void initState() {
-    getprofilImage();
+    // getprofilImage();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
@@ -63,11 +61,15 @@ class _profilPageState extends State<profilPage> {
             child: Column(
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage('$photoUtilisateur'),
+                  backgroundImage: NetworkImage(
 
-                  // 'https://www.jeancoutu.com/globalassets/revamp/photo/conseils-photo/20160302-01-reseaux-sociaux-profil/photo-profil_301783868.jpg'),
-                  radius: 50,
-                ),
+                    _image==null?
+
+                   'https://www.jeancoutu.com/globalassets/revamp/photo/conseils-photo/20160302-01-reseaux-sociaux-profil/photo-profil_301783868.jpg'
+                   :_image.toString()
+                  ),
+                   radius: 50,),
+
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -117,37 +119,21 @@ class _profilPageState extends State<profilPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       uploadFile();
-                      getprofilImage();
                     },
                     child: Text('Confirmer la photo de profile'),
                     style: ElevatedButton.styleFrom(primary: Colors.amber),
                   ),
                 ),
-                // FutureBuilder(
-                //     future: FirebaseFirestore.instance
-                //         .collection('nameUser')
-                //         .doc(uid)
-                //         .get(),
-                //     builder: (context, AsyncSnapshot snapshot) {
-                //       if (snapshot.connectionState == ConnectionState.waiting) {
-                //         return CircularProgressIndicator();
-                //       }
-                //       print(snapshot.data!.data());
-                //       return Column(
-                //         children: [
-                //           Text('Nom : ${snapshot.data!.data()!['nom']}'),
 
-                //         ],
-                //       );
-                //     })
                 StreamBuilder(
-                    stream:
-                     _firebaseAuth.authStateChanges(),
+                    stream: _firebaseAuth.authStateChanges(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.active) {
                         print(snapshot.data.toString());
-                        var currenttest = FirebaseAuth.instance.currentUser!.displayName.toString();
-                        return Text(currenttest.toString());
+                        var currenttest = FirebaseAuth
+                            .instance.currentUser!.displayName
+                            .toString();
+                        return Text('Nom: $currenttest');
                       } else {
                         return Text('');
                       }
@@ -164,11 +150,12 @@ class _profilPageState extends State<profilPage> {
   Future getImageGallery() async {
     final XFile? pickedFile =
         await picker.pickImage(source: ImageSource.gallery);
+    String addPhoto =
+        await FirebaseAuth.instance.currentUser!.photoURL.toString();
 
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
-        print(_image);
       } else {
         print('No image selected.');
       }
@@ -179,37 +166,41 @@ class _profilPageState extends State<profilPage> {
   Future getImageCamera() async {
     final XFile? pickedFile =
         await picker.pickImage(source: ImageSource.camera);
+    String addPhoto =
+        await FirebaseAuth.instance.currentUser!.photoURL.toString();
 
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
-        print(_image);
       } else {
         print('No image selected.');
       }
     });
   }
 
-// fonction pour envoyer la photo à firebase
+//fonction pour envoyer la photo à firebase
   Future uploadFile() async {
-    Reference storageRef = storage.ref('Users').child('test.png');
-    UploadTask uploadTask = storageRef.putFile(_image!);
-    await uploadTask.whenComplete(() {
-      print('File Uploaded');
-    });
+    var user =
+        FirebaseAuth.instance.currentUser?.updatePhotoURL(_image.toString());
+    print(_image);
+     print('File Uploaded');
+    // Reference storageRef =
+    //     storage.ref('Users').child("images/${_firebaseAuth.currentUser!.uid}");
+    // UploadTask uploadTask = storageRef.putFile(_image!);
+    // await uploadTask.whenComplete(() {
+    //   print('File Uploaded');
+    // });
   }
 
 // fonction pour récupérer la photo dans firebase
   getprofilImage() {
-    Reference storageRef = storage.ref('Users').child('test.png');
-    storageRef.getDownloadURL().then((photo) {
-      setState(() {
-        photoUtilisateur = photo;
-      });
-    });
-  }
-
-  Future getCurrentUser() async {
-    return await _firebaseAuth.currentUser!.displayName.toString();
+    // Reference storageRef =
+    //     storage.ref().child("images/${_firebaseAuth.currentUser!.photoURL}");
+    // storageRef.getDownloadURL().then((photo) {
+    //   setState(() {
+    //     photoUtilisateur = photo;
+    //   });
+    // });
+    var userPhoto = FirebaseAuth.instance.currentUser!.photoURL.toString();
   }
 }

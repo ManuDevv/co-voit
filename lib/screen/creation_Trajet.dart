@@ -21,11 +21,10 @@ class _creationTrajetState extends State<creationTrajet> {
   DateTime aujourdhui = DateTime.now();
   DateTime? dateselectionnee = null;
   final dateFormat = DateFormat('dd-MM-yyyy');
+   late final _heureFormat=TimeOfDay(hour: _heureselectionnee!.hour, minute: _heureselectionnee!.minute);
   TimeOfDay? _heureselectionnee = null;
   String _userdisplayName =
-    FirebaseAuth.instance.currentUser!.displayName.toString();
-
-
+      FirebaseAuth.instance.currentUser!.displayName.toString();
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +96,9 @@ class _creationTrajetState extends State<creationTrajet> {
                         if (newDate == null) return;
                         setState(() {
                           dateselectionnee = newDate;
-                          final dateFormat =
-                              DateFormat('dd-MM-yyyy').format(aujourdhui);
+                          final dateFormat = DateFormat('dd-MM-yyyy')
+                              .format(aujourdhui)
+                              .toString();
                         });
                         print(dateselectionnee);
                       },
@@ -250,14 +250,17 @@ class _creationTrajetState extends State<creationTrajet> {
 
   void ajoutTrajet() {
     try {
+      var formatDate = DateFormat('dd/MM/yyyy');
+      var hourAndMinutes =  TimeOfDay(hour: _heureselectionnee!.hour,minute: _heureselectionnee!.minute);
       laRefdelaBDD.collection('trajet').add({
-        'nom':_userdisplayName,
+        'nom': _userdisplayName,
         "départ": _depart.text,
         "arrivée": _arrivee.text,
         "Nbr de personnes": passager,
-        "date": dateFormat.toString(),
-        "heure": _heureselectionnee.toString()
-      }).then((value) => value.id);
+        "date": formatDate.format(dateselectionnee!).toString(),
+        "heure": hourAndMinutes.hour,
+        'minutes':hourAndMinutes.minute
+      }).then((value) => value.firestore);
     } catch (erreur) {
       print(erreur.toString());
     }

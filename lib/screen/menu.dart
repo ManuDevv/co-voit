@@ -42,14 +42,11 @@ class _menuScreenState extends State<menuScreen> {
         ),
         centerTitle: true,
         actions: [
+          IconButton
+          (onPressed: (() => Navigator.push(context, MaterialPageRoute(builder: (context)=>profilPage()))),
+            icon: Icon(Icons.person_outline)),
           Padding(
-            padding: const EdgeInsets.only(right: 15.0),
-            child: IconButton
-            (onPressed: (() => Navigator.push(context, MaterialPageRoute(builder: (context)=>profilPage()))),
-              icon: Icon(Icons.person_outline)),
-          ),
-          Padding(
-              padding: const EdgeInsets.only(right: 15.0),
+              padding: const EdgeInsets.only(right: 5.0),
               child: IconButton(
                   onPressed: () {
                     showDeconnexion();

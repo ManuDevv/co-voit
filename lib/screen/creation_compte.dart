@@ -161,7 +161,7 @@ class _creation_compteState extends State<creation_compte> {
     print(_passwordController.text);
     try {
       UserCredential newUser = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
+          .createUserWithEmailAndPassword( 
               email: _emailController.text.trim(),
               password: _passwordController.text.trim());
       newUser.user!.updateDisplayName(_nomController.text);
