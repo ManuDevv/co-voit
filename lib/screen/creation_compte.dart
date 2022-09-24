@@ -5,8 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
-
-
 class creation_compte extends StatefulWidget {
   creation_compte({Key? key}) : super(key: key);
 
@@ -20,6 +18,7 @@ class _creation_compteState extends State<creation_compte> {
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
   String? _nom;
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +132,6 @@ class _creation_compteState extends State<creation_compte> {
                       ElevatedButton(
                         onPressed: () {
                           addUser();
-                   
                         },
                         // ignore: sort_child_properties_last
                         child: Text(
@@ -161,15 +159,21 @@ class _creation_compteState extends State<creation_compte> {
     print(_passwordController.text);
     try {
       UserCredential newUser = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword( 
+          .createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
               password: _passwordController.text.trim());
       newUser.user!.updateDisplayName(_nomController.text);
+final User? user = FirebaseAuth.instance.currentUser;
+    final _uid = user!.uid;
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(_uid)
+          .set({'firstName': _nomController.text.trim(),
+          'name':_nomController.text.trim()});
+
       print(newUser);
     } catch (erreur) {
       print(erreur.toString());
     }
   }
-
-
 }

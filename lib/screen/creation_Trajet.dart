@@ -5,6 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
+final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+FirebaseStorage storage = FirebaseStorage.instance;
 
 class creationTrajet extends StatefulWidget {
   creationTrajet({Key? key}) : super(key: key);
@@ -21,10 +25,20 @@ class _creationTrajetState extends State<creationTrajet> {
   DateTime aujourdhui = DateTime.now();
   DateTime? dateselectionnee = null;
   final dateFormat = DateFormat('dd-MM-yyyy');
-   late final _heureFormat=TimeOfDay(hour: _heureselectionnee!.hour, minute: _heureselectionnee!.minute);
+  late final _heureFormat = TimeOfDay(
+      hour: _heureselectionnee!.hour, minute: _heureselectionnee!.minute);
   TimeOfDay? _heureselectionnee = null;
   String _userdisplayName =
       FirebaseAuth.instance.currentUser!.displayName.toString();
+
+  String? _userPhotoUrl;
+  final user = FirebaseAuth.instance.currentUser!.uid;
+
+  @override
+  void initState() {
+    getProfilImage();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -239,7 +253,7 @@ class _creationTrajetState extends State<creationTrajet> {
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 25),
-                    ))
+                    )),
               ],
             ),
           ),
@@ -251,7 +265,8 @@ class _creationTrajetState extends State<creationTrajet> {
   void ajoutTrajet() {
     try {
       var formatDate = DateFormat('dd/MM/yyyy');
-      var hourAndMinutes =  TimeOfDay(hour: _heureselectionnee!.hour,minute: _heureselectionnee!.minute);
+      var hourAndMinutes = TimeOfDay(
+          hour: _heureselectionnee!.hour, minute: _heureselectionnee!.minute);
       laRefdelaBDD.collection('trajet').add({
         'nom': _userdisplayName,
         "départ": _depart.text,
@@ -259,7 +274,8 @@ class _creationTrajetState extends State<creationTrajet> {
         "Nbr de personnes": passager,
         "date": formatDate.format(dateselectionnee!).toString(),
         "heure": hourAndMinutes.hour,
-        'minutes':hourAndMinutes.minute
+        'minutes': hourAndMinutes.minute,
+        "photoUser": _userPhotoUrl
       }).then((value) => value.firestore);
     } catch (erreur) {
       print(erreur.toString());
@@ -331,5 +347,30 @@ class _creationTrajetState extends State<creationTrajet> {
                 ],
               ),
             ));
+  }
+
+  // getprofilImage() {
+  //   Reference storageRef =
+  //       storage.ref().child("Users/images/${_firebaseAuth.currentUser!.uid}");
+  //   storageRef.getDownloadURL().then((photo) {
+  //     setState(() {
+  //       _imgUrl = photo.toString();
+  //     });
+  //   });
+  //   print(_imgUrl);
+  // }
+
+  getProfilImage() {
+    Reference ref = storage.ref().child("Users/images/$user");
+    ref.getDownloadURL().then((downloadUrl) {
+      setState(() {
+        _userPhotoUrl = downloadUrl.toString();
+        print(_userPhotoUrl);
+      });
+    }).catchError((e) {
+      setState(() {
+        print('Un problème est survenu: ${e.error}');
+      });
+    });
   }
 }

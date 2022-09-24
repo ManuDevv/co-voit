@@ -30,7 +30,7 @@ class _profilPageState extends State<profilPage> {
   final picker = ImagePicker();
   @override
   void initState() {
-    // getprofilImage();
+    getprofilImage();
     super.initState();
   }
 
@@ -61,15 +61,11 @@ class _profilPageState extends State<profilPage> {
             child: Column(
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(
-
-                    _image==null?
-
-                   'https://www.jeancoutu.com/globalassets/revamp/photo/conseils-photo/20160302-01-reseaux-sociaux-profil/photo-profil_301783868.jpg'
-                   :_image.toString()
-                  ),
-                   radius: 50,),
-
+                  backgroundImage: NetworkImage(photoUtilisateur == null
+                      ? 'https://www.jeancoutu.com/globalassets/revamp/photo/conseils-photo/20160302-01-reseaux-sociaux-profil/photo-profil_301783868.jpg'
+                      : photoUtilisateur.toString()),
+                  radius: 50,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -124,7 +120,6 @@ class _profilPageState extends State<profilPage> {
                     style: ElevatedButton.styleFrom(primary: Colors.amber),
                   ),
                 ),
-
                 StreamBuilder(
                     stream: _firebaseAuth.authStateChanges(),
                     builder: (context, snapshot) {
@@ -150,8 +145,8 @@ class _profilPageState extends State<profilPage> {
   Future getImageGallery() async {
     final XFile? pickedFile =
         await picker.pickImage(source: ImageSource.gallery);
-    String addPhoto =
-        await FirebaseAuth.instance.currentUser!.photoURL.toString();
+    // String addPhoto =
+    //     await FirebaseAuth.instance.currentUser!.photoURL.toString();
 
     setState(() {
       if (pickedFile != null) {
@@ -166,8 +161,8 @@ class _profilPageState extends State<profilPage> {
   Future getImageCamera() async {
     final XFile? pickedFile =
         await picker.pickImage(source: ImageSource.camera);
-    String addPhoto =
-        await FirebaseAuth.instance.currentUser!.photoURL.toString();
+    // String addPhoto =
+    //     await FirebaseAuth.instance.currentUser!.photoURL.toString();
 
     setState(() {
       if (pickedFile != null) {
@@ -180,27 +175,40 @@ class _profilPageState extends State<profilPage> {
 
 //fonction pour envoyer la photo à firebase
   Future uploadFile() async {
-    var user =
-        FirebaseAuth.instance.currentUser?.updatePhotoURL(_image.toString());
-    print(_image);
-     print('File Uploaded');
-    // Reference storageRef =
-    //     storage.ref('Users').child("images/${_firebaseAuth.currentUser!.uid}");
-    // UploadTask uploadTask = storageRef.putFile(_image!);
-    // await uploadTask.whenComplete(() {
-    //   print('File Uploaded');
-    // });
+    Reference storageRef =
+        storage.ref('Users').child("images/${_firebaseAuth.currentUser!.uid}");
+    UploadTask uploadTask = storageRef.putFile(_image!);
+    await uploadTask.whenComplete(() {
+      print('File Uploaded');
+    });
+
+    final User? user = FirebaseAuth.instance.currentUser;
+    final _uid = user!.uid;
+    final imageUrl = await storageRef.getDownloadURL();
+    print(imageUrl);
+    FirebaseFirestore.instance
+        .collection('user')
+        .doc(_uid)
+        .set({'userImage': imageUrl});
   }
 
 // fonction pour récupérer la photo dans firebase
   getprofilImage() {
-    // Reference storageRef =
-    //     storage.ref().child("images/${_firebaseAuth.currentUser!.photoURL}");
-    // storageRef.getDownloadURL().then((photo) {
-    //   setState(() {
-    //     photoUtilisateur = photo;
-    //   });
-    // });
-    var userPhoto = FirebaseAuth.instance.currentUser!.photoURL.toString();
+    Reference storageRef =
+        storage.ref().child("Users/images/${_firebaseAuth.currentUser!.uid}");
+    storageRef.getDownloadURL().then((photo) {
+      setState(() {
+        photoUtilisateur = photo.toString();
+      });
+    });
+    print(_firebaseAuth.currentUser!.uid);
   }
+
+  // refreshPage(context) {
+  //   Navigator.pushReplacement(
+  //       context,
+  //       PageRouteBuilder(
+  //           pageBuilder: (_, __, ___) => profilPage(),
+  //           transitionDuration: Duration(seconds: 1)));
+  // }
 }

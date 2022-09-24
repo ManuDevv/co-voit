@@ -2,9 +2,11 @@ import 'package:co_voit/screen/consultationTrajet.dart';
 import 'package:co_voit/screen/creation_Trajet.dart';
 import 'package:co_voit/screen/fristScreen.dart';
 import 'package:co_voit/screen/profil_page.dart';
+import 'package:co_voit/screen/test_autocomplete.dart';
+import 'package:co_voit/services/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:lottie/lottie.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'style.dart';
@@ -15,6 +17,7 @@ class main_menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NotificationService.initialize();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: menuScreen(),
@@ -31,6 +34,17 @@ class menuScreen extends StatefulWidget {
 
 class _menuScreenState extends State<menuScreen> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseMessaging.instance.getInitialMessage();
+
+    FirebaseMessaging.onMessage.listen((message) {
+      print(message.toString());
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     var hauteur = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -42,16 +56,22 @@ class _menuScreenState extends State<menuScreen> {
         ),
         centerTitle: true,
         actions: [
-          IconButton
-          (onPressed: (() => Navigator.push(context, MaterialPageRoute(builder: (context)=>profilPage()))),
-            icon: Icon(Icons.person_outline)),
+          IconButton(
+              onPressed: (() => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => profilPage()))),
+              icon: Icon(Icons.person_outline)),
           Padding(
               padding: const EdgeInsets.only(right: 5.0),
               child: IconButton(
                   onPressed: () {
                     showDeconnexion();
                   },
-                  icon: Icon(Icons.logout_rounded)))
+                  icon: Icon(Icons.logout_rounded))),
+          IconButton(
+            onPressed: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => testAutoComplete())),
+            icon: Icon(Icons.textsms_outlined),
+          )
         ],
       ),
       body: Container(
@@ -143,7 +163,7 @@ class _menuScreenState extends State<menuScreen> {
                       )),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
