@@ -26,6 +26,7 @@ class _consultationTrajetState extends State<consultationTrajet> {
   var dateFormat = DateFormat('dd/MM/yyyy');
   var heureFormat = DateFormat('HH:mm');
   String? photoUtilisateur;
+  DateTime now =DateTime.now();
   
 
   @override
@@ -44,48 +45,57 @@ class _consultationTrajetState extends State<consultationTrajet> {
           centerTitle: true,
         ),
         body: Center(
-          child: GestureDetector(
-            onTap: (() => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => detailTrajet(
-                  villeDepart: 'c_est moi ',
+          child: StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection('trajet').snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                      snapshot) {
+                // on regarde si la connection est bonne
+                print(snapshot.connectionState);
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+                // on regarde si j'ai pas d'erreur
+                if (snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                }
 
-                )))),
-            child: StreamBuilder(
-                stream:
-                    FirebaseFirestore.instance.collection('trajet').snapshots(),
-                builder: (context,
-                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                        snapshot) {
-                  // on regarde si la connection est bonne
-                  print(snapshot.connectionState);
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  }
-                  // on regarde si j'ai pas d'erreur
-                  if (snapshot.hasError) {
-                    return Text(snapshot.error.toString());
-                  }
+                print(snapshot.data!.docs);
+                // je map les donnée
 
-                  print(snapshot.data!.docs);
-                  // je map les donnée
+                List<QueryDocumentSnapshot<Map<String, dynamic>>> lesDonnes =
+                    snapshot.data!.docs;
+                print(lesDonnes);
 
-                  List<QueryDocumentSnapshot<Map<String, dynamic>>> lesDonnes =
-                      snapshot.data!.docs;
-                  print(lesDonnes);
-
-                  return Container(
-                    margin: EdgeInsets.all(20),
-                    child: ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, int index) => Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                //interieur de chaque container
-                                Container(
+                return Container(
+                  margin: EdgeInsets.all(20),
+                  child: ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, int index) => Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              //interieur de chaque container
+                              GestureDetector(
+                                onTap:(){
+                                  // ci-dessous je passe les parametres pour la future vue 
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>detailTrajet(
+                                    depart: snapshot.data!.docs[index].data()['départ'],
+                                    arrivee:snapshot.data!.docs[index].data()['arrivée'],
+                                    date:snapshot.data!.docs[index].data()['date'],
+                                    user: snapshot.data!.docs[index].data()['nom'],
+                                    userPhoto:snapshot.data!.docs[index].data()['photoUser']
+                                    
+                                    
+                                    
+                                    
+                                    )));
+                                },
+                                child: Container(
                                   margin: EdgeInsets.only(bottom: 20),
                                   decoration: BoxDecoration(
                                       color: Colors.amber,
@@ -112,7 +122,7 @@ class _consultationTrajetState extends State<consultationTrajet> {
                                         SizedBox(
                                           height: 10,
                                         ),
-
+                              
                                         // revoir le système d'heure
                                         Text(snapshot.data!.docs[index]
                                                     .data()['heure'] !=
@@ -168,14 +178,15 @@ class _consultationTrajetState extends State<consultationTrajet> {
                                       ],
                                     ),
                                   ),
-                                )
-                              ],
-                            ))),
-                  );
-                }),
-          ),
+                                ),
+                              )
+                            ],
+                          ))),
+                );
+              }),
         ));
   }
 
 
-}
+ }
+

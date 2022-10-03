@@ -1,14 +1,24 @@
+import 'dart:ffi';
+
 import 'package:co_voit/screen/style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class detailTrajet extends StatelessWidget {
-  final String villeDepart;
-  
+  final String depart;
+  final String arrivee;
+  final String date;
+  final String user;
+  final String userPhoto;
 
-  const detailTrajet({
-    Key? key, required this.villeDepart
-  }) : super(key: key);
+  detailTrajet(
+      {Key? key,
+      required this.depart,
+      required this.arrivee,
+      required this.date,
+      required this.user,
+      required this.userPhoto})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +46,7 @@ class detailTrajet extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text(villeDepart, style: stylePrincipal20)
+                Text(depart.toString(), style: stylePrincipal20)
               ],
             ),
           ),
@@ -52,7 +62,7 @@ class detailTrajet extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text('Bergues', style: stylePrincipal20)
+                Text(arrivee.toString(), style: stylePrincipal20)
               ],
             ),
           ),
@@ -68,10 +78,11 @@ class detailTrajet extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text('Départ le : 28/06/2022 à 18h45', style: stylePrincipal20)
+                Text('Départ le : ${date.toString()} à 18h45',
+                    style: stylePrincipal20)
               ],
             ),
-          ), 
+          ),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(
@@ -84,16 +95,24 @@ class detailTrajet extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text('Proposé par: Emmanuel', style: stylePrincipal20)
+                Text('Proposé par: ${user.toString()}', style: stylePrincipal20)
               ],
             ),
-          ), 
-          
-          ElevatedButton(onPressed: (){}, child: Text("S'inscrire",
-          style: stylePrincipal25,),
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.amber)
-          ),)
+          ),
+          CircleAvatar(
+            radius: 50,
+            backgroundImage: NetworkImage(userPhoto.toString()),
+          ),
+          Padding(padding: EdgeInsets.only(top: 20)),
+          ElevatedButton(
+            onPressed: () {},
+            child: Text(
+              "S'inscrire",
+              style: stylePrincipal25,
+            ),
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.amber)),
+          )
         ]),
       ),
     );
