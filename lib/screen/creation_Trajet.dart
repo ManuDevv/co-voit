@@ -275,7 +275,8 @@ class _creationTrajetState extends State<creationTrajet> {
         "date": formatDate.format(dateselectionnee!).toString(),
         "heure": hourAndMinutes.hour,
         'minutes': hourAndMinutes.minute,
-        "photoUser": _userPhotoUrl
+        "photoUser": _userPhotoUrl,
+        "nbr_passager":0
       }).then((value) => value.firestore);
     } catch (erreur) {
       print(erreur.toString());

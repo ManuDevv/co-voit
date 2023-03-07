@@ -18,7 +18,9 @@ class _creation_compteState extends State<creation_compte> {
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
   String? _nom;
- 
+  final List equipe = ["1", "2", "3", "4", "5"];
+  String _first_item = '1';
+  final _key = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +38,8 @@ class _creation_compteState extends State<creation_compte> {
                       child: Lottie.network(
                           "https://assets6.lottiefiles.com/packages/lf20_dyq0qz89/data.json")),
                   Container(
-                    margin: EdgeInsets.only(top: 30),
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    margin: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
                     //    height: hauteur / 3,
                     width: largeur * 0.8,
                     decoration: BoxDecoration(
@@ -55,98 +57,186 @@ class _creation_compteState extends State<creation_compte> {
                       const SizedBox(
                         height: 20,
                       ),
-                      TextField(
-                        controller: _nomController,
-                        decoration: InputDecoration(
-                            label: Text('Nom'),
-                            labelStyle:
-                                GoogleFonts.pacifico(color: Colors.white),
-                            // ignore: prefer_const_constructors
-                            prefixIcon: Icon(
-                              Icons.person_add_alt,
-                              color: Colors.white,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(30))),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                        controller: _prenomController,
-                        decoration: InputDecoration(
-                            label: Text('Prénom'),
-                            labelStyle:
-                                GoogleFonts.pacifico(color: Colors.white),
-                            // ignore: prefer_const_constructors
-                            prefixIcon: Icon(
-                              Icons.person_add_alt_1,
-                              color: Colors.white,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(30))),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                            label: Text('Votre Email'),
-                            labelStyle:
-                                GoogleFonts.pacifico(color: Colors.white),
-                            // ignore: prefer_const_constructors
-                            prefixIcon: Icon(
-                              Icons.email_outlined,
-                              color: Colors.white,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(30))),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                            label: Text('Mot de passe'),
-                            labelStyle:
-                                GoogleFonts.pacifico(color: Colors.white),
-                            prefixIcon: Icon(
-                              Icons.lock_open,
-                              color: Colors.white,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(30)),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(30))),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          addUser();
-                        },
-                        // ignore: sort_child_properties_last
-                        child: Text(
-                          'Créer un compte ',
-                          style: GoogleFonts.pacifico(
-                              color: Colors.white,
-                              fontSize: 30,
-                              letterSpacing: 1.5),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white.withOpacity(0.5),
-                          side: BorderSide(
-                              color: Colors.white.withOpacity(0.5), width: 3),
-                        ),
-                      ),
+                      Form(
+                          key: _key,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: _nomController,
+                                validator: ((value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Le champs est vide';
+                                  }
+                                  return null;
+                                }),
+                                decoration: InputDecoration(
+                                    label: Text('Nom'),
+                                    labelStyle: GoogleFonts.pacifico(
+                                        color: Colors.white),
+                                    // ignore: prefer_const_constructors
+                                    prefixIcon: Icon(
+                                      Icons.person_add_alt,
+                                      color: Colors.white,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                        borderRadius:
+                                            BorderRadius.circular(30))),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                controller: _prenomController,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Ce champ est vide';
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                    label: Text('Prénom'),
+                                    labelStyle: GoogleFonts.pacifico(
+                                        color: Colors.white),
+                                    // ignore: prefer_const_constructors
+                                    prefixIcon: Icon(
+                                      Icons.person_add_alt_1,
+                                      color: Colors.white,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                        borderRadius:
+                                            BorderRadius.circular(30))),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text('Equipe',
+                                        style: GoogleFonts.pacifico(
+                                            color: Colors.white, fontSize: 20)),
+                                    DropdownButton(
+                                        items: [
+                                          DropdownMenuItem(
+                                              value: "1",
+                                              child: Text('1',
+                                                  style: GoogleFonts.pacifico(
+                                                    color: Colors.black,
+                                                  ))),
+                                          DropdownMenuItem(
+                                              value: "2",
+                                              child: Text('2',
+                                                  style: GoogleFonts.pacifico(
+                                                    color: Colors.black,
+                                                  ))),
+                                          DropdownMenuItem(
+                                              value: "3",
+                                              child: Text('3',
+                                                  style: GoogleFonts.pacifico(
+                                                    color: Colors.black,
+                                                  ))),
+                                          DropdownMenuItem(
+                                              value: "4",
+                                              child: Text('4',
+                                                  style: GoogleFonts.pacifico(
+                                                    color: Colors.black,
+                                                  ))),
+                                          DropdownMenuItem(
+                                              value: "5",
+                                              child: Text('5',
+                                                  style: GoogleFonts.pacifico(
+                                                    color: Colors.black,
+                                                  ))),
+                                        ],
+                                        value: _first_item,
+                                        onChanged: liste_deroulante),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                controller: _emailController,
+                                //validator: ,
+                                decoration: InputDecoration(
+                                    label: Text('Votre Email'),
+                                    labelStyle: GoogleFonts.pacifico(
+                                        color: Colors.white),
+                                    // ignore: prefer_const_constructors
+                                    prefixIcon: Icon(
+                                      Icons.email_outlined,
+                                      color: Colors.white,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                        borderRadius:
+                                            BorderRadius.circular(30))),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                obscureText: true,
+                                controller: _passwordController,
+                                validator: (value) {
+                                  if (value!.length < 6) {
+                                    return '6 caractères minimun';
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                    label: Text('Mot de passe'),
+                                    labelStyle: GoogleFonts.pacifico(
+                                        color: Colors.white),
+                                    prefixIcon: Icon(
+                                      Icons.lock_open,
+                                      color: Colors.white,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                        borderRadius:
+                                            BorderRadius.circular(30))),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  addUser();
+                                  if (_key.currentState!.validate()) ;
+                                },
+                                // ignore: sort_child_properties_last
+                                child: Text(
+                                  'Créer un compte ',
+                                  style: GoogleFonts.pacifico(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      letterSpacing: 1.5),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.white.withOpacity(0.5),
+                                  side: BorderSide(
+                                      color: Colors.white.withOpacity(0.5),
+                                      width: 3),
+                                ),
+                              ),
+                            ],
+                          ))
                     ]),
                   ),
                 ],
@@ -163,17 +253,25 @@ class _creation_compteState extends State<creation_compte> {
               email: _emailController.text.trim(),
               password: _passwordController.text.trim());
       newUser.user!.updateDisplayName(_nomController.text);
-final User? user = FirebaseAuth.instance.currentUser;
-    final _uid = user!.uid;
-      FirebaseFirestore.instance
-          .collection('user')
-          .doc(_uid)
-          .set({'firstName': _nomController.text.trim(),
-          'name':_nomController.text.trim()});
+      final User? user = FirebaseAuth.instance.currentUser;
+      final _uid = user!.uid;
+      FirebaseFirestore.instance.collection('user').doc(_uid).set({
+        'firstName': _nomController.text.trim(),
+        'name': _prenomController.text.trim(),
+        'equipe': _first_item
+      });
 
       print(newUser);
     } catch (erreur) {
       print(erreur.toString());
+    }
+  }
+
+  void liste_deroulante(String? _select_value) {
+    if (_select_value is String) {
+      setState(() {
+        _first_item = _select_value;
+      });
     }
   }
 }

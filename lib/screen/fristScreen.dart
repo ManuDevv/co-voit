@@ -34,12 +34,7 @@ class _loginScreenState extends State<loginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // @override
-  // void initState() {
-  //   testOpacity(dynamic);
-  //   testSlide();
-  //   super.initState();
-  // }
+ 
 
   @override
   Widget build(BuildContext context) {

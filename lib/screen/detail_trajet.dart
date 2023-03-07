@@ -1,10 +1,8 @@
-import 'dart:ffi';
-
 import 'package:co_voit/screen/style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class detailTrajet extends StatelessWidget {
+class detailTrajet extends StatefulWidget {
   final String depart;
   final String arrivee;
   final String date;
@@ -19,6 +17,13 @@ class detailTrajet extends StatelessWidget {
       required this.user,
       required this.userPhoto})
       : super(key: key);
+
+  @override
+  State<detailTrajet> createState() => _detailTrajetState();
+}
+
+class _detailTrajetState extends State<detailTrajet> {
+  int _nbr_passager = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +51,7 @@ class detailTrajet extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text(depart.toString(), style: stylePrincipal20)
+                Text(widget.depart.toString(), style: stylePrincipal20)
               ],
             ),
           ),
@@ -62,7 +67,7 @@ class detailTrajet extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text(arrivee.toString(), style: stylePrincipal20)
+                Text(widget.arrivee.toString(), style: stylePrincipal20)
               ],
             ),
           ),
@@ -78,7 +83,7 @@ class detailTrajet extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text('Départ le : ${date.toString()} à 18h45',
+                Text('Départ le : ${widget.date.toString()} à 18h45',
                     style: stylePrincipal20)
               ],
             ),
@@ -95,17 +100,20 @@ class detailTrajet extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text('Proposé par: ${user.toString()}', style: stylePrincipal20)
+                Text('Proposé par: ${widget.user.toString()}',
+                    style: stylePrincipal20)
               ],
             ),
           ),
           CircleAvatar(
             radius: 50,
-            backgroundImage: NetworkImage(userPhoto.toString()),
+            backgroundImage: NetworkImage(widget.userPhoto.toString()),
           ),
           Padding(padding: EdgeInsets.only(top: 20)),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              inscription();
+            },
             child: Text(
               "S'inscrire",
               style: stylePrincipal25,
@@ -116,5 +124,48 @@ class detailTrajet extends StatelessWidget {
         ]),
       ),
     );
+  }
+
+  inscription() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(
+                'Incription',
+                style: GoogleFonts.pacifico(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold),
+              ),
+              content: StatefulBuilder(
+                  builder: (BuildContext ctx, StateSetter state) {
+                return Container(
+                  height: 300,
+                  decoration: BoxDecoration(
+                    color: Colors.green
+                  ),
+                  child: Column(
+                    children: [
+                      Text("S'incrire"),
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: () {
+
+                                
+                                setState(() {
+                               
+                                });
+                              
+                              },
+                              icon: Icon(Icons.add_rounded)),
+                          
+                        ],
+                      )
+                    ],
+                  ),
+                );
+              }),
+            ));
   }
 }

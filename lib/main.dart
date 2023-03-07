@@ -4,6 +4,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:co_voit/screen/creation_Trajet.dart';
 import 'package:co_voit/screen/fristScreen.dart';
 import 'package:co_voit/screen/menu.dart';
+import 'package:co_voit/services/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
@@ -12,16 +13,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-Future<void> backgroundHandler(RemoteMessage message) async {
-  print(message.notification!.title.toString());
-  print('test notification');
-  
+FirebaseMessaging _messenging = FirebaseMessaging.instance;
+_getToken() {
+  _messenging.getToken().then((token) {
+    print('token = ' + token!);
+  });
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  _getToken();
+  
+
   FirebaseAuth.instance.authStateChanges().listen((User? utilisateur) {
     if (utilisateur == null) {
       print('Utilisateur non connecté');
@@ -38,6 +42,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NotificationService.initialize();
     return MaterialApp(debugShowCheckedModeBanner: false, home: splashScreen());
   }
 }

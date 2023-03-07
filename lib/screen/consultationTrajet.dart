@@ -26,12 +26,9 @@ class _consultationTrajetState extends State<consultationTrajet> {
   var dateFormat = DateFormat('dd/MM/yyyy');
   var heureFormat = DateFormat('HH:mm');
   String? photoUtilisateur;
-  DateTime now =DateTime.now();
-  
+  DateTime now = DateTime.now();
 
   @override
- 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,8 +46,7 @@ class _consultationTrajetState extends State<consultationTrajet> {
               stream:
                   FirebaseFirestore.instance.collection('trajet').snapshots(),
               builder: (context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                      snapshot) {
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 // on regarde si la connection est bonne
                 print(snapshot.connectionState);
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -81,19 +77,24 @@ class _consultationTrajetState extends State<consultationTrajet> {
                             children: [
                               //interieur de chaque container
                               GestureDetector(
-                                onTap:(){
-                                  // ci-dessous je passe les parametres pour la future vue 
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>detailTrajet(
-                                    depart: snapshot.data!.docs[index].data()['départ'],
-                                    arrivee:snapshot.data!.docs[index].data()['arrivée'],
-                                    date:snapshot.data!.docs[index].data()['date'],
-                                    user: snapshot.data!.docs[index].data()['nom'],
-                                    userPhoto:snapshot.data!.docs[index].data()['photoUser']
-                                    
-                                    
-                                    
-                                    
-                                    )));
+                                onTap: () {
+                                  // ci-dessous je passe les parametres pour la future vue
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => detailTrajet(
+                                              depart: snapshot.data!.docs[index]
+                                                  .data()['départ'],
+                                              arrivee: snapshot
+                                                  .data!.docs[index]
+                                                  .data()['arrivée'],
+                                              date: snapshot.data!.docs[index]
+                                                  .data()['date'],
+                                              user: snapshot.data!.docs[index]
+                                                  .data()['nom'],
+                                              userPhoto: snapshot
+                                                  .data!.docs[index]
+                                                  .data()['photoUser'])));
                                 },
                                 child: Container(
                                   margin: EdgeInsets.only(bottom: 20),
@@ -122,7 +123,7 @@ class _consultationTrajetState extends State<consultationTrajet> {
                                         SizedBox(
                                           height: 10,
                                         ),
-                              
+
                                         // revoir le système d'heure
                                         Text(snapshot.data!.docs[index]
                                                     .data()['heure'] !=
@@ -153,13 +154,15 @@ class _consultationTrajetState extends State<consultationTrajet> {
                                           child: Row(
                                             children: [
                                               CircleAvatar(
-                                                radius: 30,
-                                                  backgroundImage: NetworkImage(
-                                                    snapshot.data!.docs[index].data()['photoUser']== null ?
-                                                    'https://thumbs.dreamstime.com/b/man-icon-person-vector-worker-162495520.jpg'
-                                                 :'${snapshot.data!.docs[index].data()['photoUser']}')),
-                                                     
-                                        
+                                                  radius: 30,
+                                                  backgroundImage: NetworkImage(snapshot
+                                                                  .data!
+                                                                  .docs[index]
+                                                                  .data()[
+                                                              'photoUser'] ==
+                                                          null
+                                                      ? 'https://thumbs.dreamstime.com/b/man-icon-person-vector-worker-162495520.jpg'
+                                                      : '${snapshot.data!.docs[index].data()['photoUser']}')),
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     left: 8.0),
@@ -175,6 +178,7 @@ class _consultationTrajetState extends State<consultationTrajet> {
                                             ],
                                           ),
                                         ),
+                                        
                                       ],
                                     ),
                                   ),
@@ -187,6 +191,6 @@ class _consultationTrajetState extends State<consultationTrajet> {
         ));
   }
 
-
- }
-
+ 
+  
+}

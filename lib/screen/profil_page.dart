@@ -132,7 +132,23 @@ class _profilPageState extends State<profilPage> {
                       } else {
                         return Text('');
                       }
-                    })
+                    }),
+                SizedBox(
+                  height: 20,
+                ),
+                StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('user')
+                        .snapshots(),
+                    builder: (context,
+                            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                snapshot) =>
+                        ListView(
+          children: snapshot.data!.docs.map((document) {
+            return ListTile(
+              title: Text(document['equipe']),
+            );
+          }).toList(),))
               ],
             ),
           )
@@ -203,12 +219,4 @@ class _profilPageState extends State<profilPage> {
     });
     print(_firebaseAuth.currentUser!.uid);
   }
-
-  // refreshPage(context) {
-  //   Navigator.pushReplacement(
-  //       context,
-  //       PageRouteBuilder(
-  //           pageBuilder: (_, __, ___) => profilPage(),
-  //           transitionDuration: Duration(seconds: 1)));
-  // }
 }
